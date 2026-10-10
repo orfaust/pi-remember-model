@@ -1,8 +1,12 @@
 # pi-remember-model
 
-Pi extension that remembers the last selected model and thinking level for new sessions. The extension's behavior is unchanged from the original local version.
+Pi extension that remembers the last selected model and thinking level for new sessions.
 
-## Install locally
+## Install from npm
+
+Run `pi install npm:pi-remember-model`, then use `pi list` to check the installed source.
+
+## Install locally (development)
 
 From this repository, run `pi install .` (user-level; do not pass `--local`). Pi loads the package directly from this checkout, so edits to `extensions/remember-model.ts` can be tested with `/reload` or a fresh Pi process. Use `pi list` to check the installed source. No copy into Pi's extensions directory is needed.
 
