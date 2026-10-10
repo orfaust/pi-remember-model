@@ -1,0 +1,8 @@
+# Only explicitly reviewed files may enter the public repository.
+/*
+!/.gitignore
+!/README.md
+!/package.json
+!/extensions/
+/extensions/*
+!/extensions/remember-model.ts
