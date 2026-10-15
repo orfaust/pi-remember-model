@@ -14,4 +14,12 @@ From this repository, run `pi install .` (user-level; do not pass `--local`). Pi
 
 Edit `extensions/remember-model.ts` in this checkout. The `pi.extensions` manifest in `package.json` selects that file. Pi provides `@earendil-works/pi-coding-agent` at runtime; local packages are not modified by `pi install`.
 
+Run the tests with:
+
+```
+npm test
+```
+
+They use only Node's built-in test runner (no dependency) and cover the startup precedence rule: an explicitly selected model (`--model`, `--provider`, `--models`) is never overridden, while a plain launch still inherits the remembered model.
+
 The extension reads and writes `last-model.json` in Pi's user agent directory. That state file is **not** part of this repository. Keep credentials, personal settings, and session files outside the repository as well.

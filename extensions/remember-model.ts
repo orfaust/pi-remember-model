@@ -18,6 +18,20 @@ interface SavedConfig {
   thinkingLevel: ThinkingLevel;
 }
 
+/**
+ * True when the user selected a model explicitly on the command line
+ * (`--model`, `--provider`, or `--models`). Pi exposes no event field for this,
+ * so the process arguments are the only reliable source. The `argv` parameter
+ * exists so callers can inject arguments; it defaults to the live process.
+ */
+function hasExplicitModelArg(
+  argv: readonly string[] = process.argv,
+): boolean {
+  return argv.some(
+    (arg) => arg === "--model" || arg === "--provider" || arg === "--models",
+  );
+}
+
 export default function rememberModelAndThinking(pi: ExtensionAPI) {
   const stateFile = join(getAgentDir(), "last-model.json");
 
@@ -84,6 +98,28 @@ export default function rememberModelAndThinking(pi: ExtensionAPI) {
 
     if (event.reason !== "new" && !isFreshStartup) {
       return;
+    }
+
+    // Startup only: respect an explicitly chosen model. `ctx.getModel()`
+    // returns the live session model, already resolved from `--model`/`--models`
+    // before `session_start` fires, and Pi exposes no flag on the event, so the
+    // process arguments are the only reliable signal for an explicit choice.
+    // An in-process "new" session has no new CLI flags and must still inherit
+    // the remembered model.
+    if (event.reason === "startup") {
+      const currentModel = ctx.getModel?.();
+
+      if (
+        currentModel &&
+        (currentModel.provider !== lastConfig.provider ||
+          currentModel.id !== lastConfig.model)
+      ) {
+        return;
+      }
+
+      if (hasExplicitModelArg()) {
+        return;
+      }
     }
 
     const model = ctx.modelRegistry.find(

@@ -6,3 +6,6 @@
 !/extensions/
 /extensions/*
 !/extensions/remember-model.ts
+!/tests/
+/tests/*
+!/tests/remember-model.test.mjs
